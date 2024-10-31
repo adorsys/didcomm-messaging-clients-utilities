@@ -1,3 +1,4 @@
+import { DIDDoc } from "didcomm"
 
 
 export const MEDIATOR_DIDDOC =
@@ -104,4 +105,45 @@ export const CLIENT_DIDDOC =
   ]
 }
 
-
+export const CLIENT_DIDDOC_MULTIKEY = {
+  "@context": [
+    "https://www.w3.org/ns/did/v1",
+    "https://w3id.org/security/suites/ed25519-2020/v1",
+    "https://w3id.org/security/suites/x25519-2020/v1"
+  ],
+  "id": "did:key:z6MkrQT3VKYGkbPaYuJeBv31gNgpmVtRWP5yTocLDBgPpayM",
+  "verificationMethod": [
+    {
+      "id": "did:key:z6MkrQT3VKYGkbPaYuJeBv31gNgpmVtRWP5yTocLDBgPpayM#z6MkrQT3VKYGkbPaYuJeBv31gNgpmVtRWP5yTocLDBgPpayM",
+      "type": "Ed25519VerificationKey2020",
+      "controller": "did:key:z6MkrQT3VKYGkbPaYuJeBv31gNgpmVtRWP5yTocLDBgPpayM",
+      "publicKeyMultibase": "z6MkrQT3VKYGkbPaYuJeBv31gNgpmVtRWP5yTocLDBgPpayM"
+    },
+    {
+      "id": "did:key:z6MkrQT3VKYGkbPaYuJeBv31gNgpmVtRWP5yTocLDBgPpayM#z6LSrg7a5XbCj5X6WGPfGq4mQ8PB8R4rQKbAYEuEoF26yCtZ",
+      "type": "X25519KeyAgreementKey2020",
+      "controller": "did:key:z6MkrQT3VKYGkbPaYuJeBv31gNgpmVtRWP5yTocLDBgPpayM",
+      "publicKeyMultibase": "z6LSrg7a5XbCj5X6WGPfGq4mQ8PB8R4rQKbAYEuEoF26yCtZ"
+    }
+  ],
+  "authentication": [
+    "did:key:z6MkrQT3VKYGkbPaYuJeBv31gNgpmVtRWP5yTocLDBgPpayM#z6MkrQT3VKYGkbPaYuJeBv31gNgpmVtRWP5yTocLDBgPpayM"
+  ],
+  "keyAgreement": [
+    "did:key:z6MkrQT3VKYGkbPaYuJeBv31gNgpmVtRWP5yTocLDBgPpayM#z6LSrg7a5XbCj5X6WGPfGq4mQ8PB8R4rQKbAYEuEoF26yCtZ"
+  ],
+  
+  "service": [
+    {
+      "id": "#didcomm",
+      "type": "DIDCommMessaging",
+      "serviceEndpoint": {
+        "accept": [
+          "didcomm/v2"
+        ],
+        "routingKeys": [],
+        "uri": "http://alice-mediator.com/"
+      }
+    }
+  ]
+}
