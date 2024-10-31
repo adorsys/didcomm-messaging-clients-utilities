@@ -1,43 +1,22 @@
-import { Buffer } from 'buffer';
 import { DIDDoc, DIDResolver, Service, VerificationMethod } from 'didcomm';
 import base64url from 'base64url';
+import { Buffer } from 'buffer';
+import base58 from 'bs58';
+import bs58 from 'bs58';
 
-type Purpose =
-  | 'Assertion'
-  | 'Encryption'
-  | 'Verification'
-  | 'CapabilityDelegation'
-  | 'CapabilityInvocation'
-  | 'Service';
+type Purpose = 'Assertion' | 'Encryption' | 'Verification' | 'CapabilityDelegation' | 'CapabilityInvocation' | 'Service';
 
 export default class PeerDIDResolver implements DIDResolver {
-  private diddocs: DIDDoc[];
-
-  constructor(diddocs: DIDDoc[] = []) {
-    this.diddocs = diddocs;
-  }
-
-  static default(): PeerDIDResolver {
-    return new PeerDIDResolver([
-      {
-        id: '',
-        keyAgreement: [],
-        authentication: [],
-        verificationMethod: [],
-        service: []
-      }
-    ]);
-  }
-
   async resolve(did: string): Promise<DIDDoc | null> {
     try {
-      const existingDIDDoc = this.diddocs.find(doc => doc.id === did);
-      if (existingDIDDoc) return existingDIDDoc;
-
+      // Validate if the DID starts with the "did:peer:" prefix
       if (!did.startsWith('did:peer:')) {
         throw new Error('Unsupported DID method');
+      } else if (!did.startsWith('did:peer:2')) {
+        throw new Error('Unsupported DID peer Version');
       }
 
+      // Dissect the DID address
       const chain = did
         .replace(/^did:peer:2\./, '')
         .split('.')
@@ -71,27 +50,31 @@ export default class PeerDIDResolver implements DIDResolver {
               break;
           }
 
+          // Convert multibase key to JWK and use it in the verification method
+          const jwkKey = multibaseToJwk(`z${multikey}`);
           const method: VerificationMethod = {
             id,
-            type: 'X25519KeyAgreementKey2019',
+            type: 'JsonWebKey2020',
             controller: did,
-            publicKeyMultibase: `z${multikey}`,
+            publicKeyJwk: jwkKey,
           };
 
           verificationMethods.push(method);
         });
 
+      // Resolve services
       const services: Service[] = [];
       let serviceNextId = 0;
 
       chain
         .filter(({ purpose }) => purpose === 'Service')
         .forEach(({ multikey }) => {
-          const decodedService = Buffer.from(multikey, 'base64').toString('utf-8');
+          const decodedService = base64url.decode(multikey);
           const service = reverseAbbreviateService(decodedService);
 
           if (!service.id) {
-            service.id = serviceNextId === 0 ? '#service' : `#service-${serviceNextId}`;
+            service.id =
+              serviceNextId === 0 ? '#service' : `#service-${serviceNextId}`;
             serviceNextId++;
           }
 
@@ -106,7 +89,6 @@ export default class PeerDIDResolver implements DIDResolver {
         service: services,
       };
 
-      this.diddocs.push(diddoc);
       return diddoc;
     } catch (error) {
       console.error('Error resolving DID:', error);
@@ -115,6 +97,59 @@ export default class PeerDIDResolver implements DIDResolver {
   }
 }
 
+// Helper function to compare two Uint8Arrays for equality
+function base64UrlEncode(array: Uint8Array): string {
+  let binaryString = '';
+  array.forEach(byte => (binaryString += String.fromCharCode(byte)));
+  const base64 = btoa(binaryString);
+  return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+
+function multibaseToJwk(multibaseKey: string) {
+  if (!multibaseKey.startsWith('z')) {
+    throw new Error('Invalid multibase key format: must start with "z"');
+  }
+
+  // Decode the base58 key, removing the 'z' prefix.
+  const base58Key = multibaseKey.slice(1);
+  const decodedKey = base58.decode(base58Key);
+
+  const ED25519_PUB_CODE = [0xed, 0x01];
+  const X25519_PUB_CODE = [0xec, 0x01];
+  const NEW_PUB_CODE = [0x02, 0x3c]; // Adding support for prefix [2, 60]
+
+  function matchesPrefix(decodedKey: Uint8Array, prefix: number[]) {
+    return decodedKey.slice(0, prefix.length).every((v, i) => v === prefix[i]);
+  }
+
+  let keyBytes: Uint8Array | undefined;
+
+  if (matchesPrefix(decodedKey, ED25519_PUB_CODE)) {
+    keyBytes = decodedKey.slice(ED25519_PUB_CODE.length);
+    return {
+      kty: 'OKP',
+      crv: 'Ed25519',
+      x: base64UrlEncode(keyBytes),
+    };
+  } else if (matchesPrefix(decodedKey, X25519_PUB_CODE)) {
+    keyBytes = decodedKey.slice(X25519_PUB_CODE.length);
+    return {
+      kty: 'OKP',
+      crv: 'X25519',
+      x: base64UrlEncode(keyBytes),
+    };
+  } else if (matchesPrefix(decodedKey, NEW_PUB_CODE)) {
+    // Handling the [2, 60] prefix
+    keyBytes = decodedKey.slice(NEW_PUB_CODE.length);
+    return {
+      kty: 'OKP',
+      crv: 'CustomCurve', // Adjust as needed for the curve type
+      x: base64UrlEncode(keyBytes),
+    };
+  } else {
+    throw new Error(`Unsupported multicodec prefix for this key type. Prefix found: ${Array.from(decodedKey.slice(0, 2))}`);
+  }
+}
 function reverseAbbreviateService(decodedService: string): Service {
   const parsed = JSON.parse(decodedService);
   return {

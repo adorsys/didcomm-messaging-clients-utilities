@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "base64url": "^3.0.1",
+    "bs58": "^6.0.0",
     "buffer": "^6.0.3",
     "didcomm": "^0.4.1",
     "formik": "^2.4.6",
