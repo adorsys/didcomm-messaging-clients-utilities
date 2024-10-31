@@ -30,7 +30,17 @@ export const SECRETS: Secret[] = [
       kty: "OKP",
       x: "SQ_7useLAjGf66XAwQWuBuSv9PdD_wB4TJQ6w38nFwQ",
     },
-  }
+  },
+  {
+    id: "#key-2",
+    type: "JsonWebKey2020",
+    privateKeyJwk: {
+      crv: "X25519",
+      d: "kxUXT-2TOa6F6xk2ojQgJlT3xWq0aCA9j-BW4VB5_A8",
+      kty: "OKP",
+      x: "SQ_7useLAjGf66XAwQWuBuSv9PdD_wB4TJQ6w38nFwQ",
+    },
+  },
 ];
 
 // export const SECRETS: Secret =

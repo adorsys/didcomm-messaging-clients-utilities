@@ -16,7 +16,8 @@ import { SECRETS } from "../secrets/client";
 export const mytest = async () => {
   console.log("starting mytest");
 
-  const From = "did:key:z6MkrQT3VKYGkbPaYuJeBv31gNgpmVtRWP5yTocLDBgPpayM";
+  let From = "did:key:z6MkrQT3VKYGkbPaYuJeBv31gNgpmVtRWP5yTocLDBgPpayM";
+  From = "did:peer:2.Vz6Mkf6r1uMJwoRAbzkuyj2RwPusdZhWSPeEknnTcKv2C2EN7.Ez6LSgbP4b3y8HVWG6C73WF2zLbzjDAPXjc33P2VfnVVHE347.SeyJpZCI6IiNkaWRjb21tIiwicyI6eyJhIjpbImRpZGNvbW0vdjIiXSwiciI6W10sInVyaSI6Imh0dHA6Ly9hbGljZS1tZWRpYXRvci5jb20ifSwidCI6ImRtIn0";
   let TO =
     "did:peer:2.Vz6Mkf6r1uMJwoRAbzkuyj2RwPusdZhWSPeEknnTcKv2C2EN7.Ez6LSgbP4b3y8HVWG6C73WF2zLbzjDAPXjc33P2VfnVVHE347.SeyJpZCI6IiNkaWRjb21tIiwicyI6eyJhIjpbImRpZGNvbW0vdjIiXSwiciI6W10sInVyaSI6Imh0dHA6Ly9hbGljZS1tZWRpYXRvci5jb20ifSwidCI6ImRtIn0";
   TO = From;
@@ -38,7 +39,6 @@ export const mytest = async () => {
 
   const msg = new Message(val);
   const did_resolver: DIDResolver = new ExampleDIDResolver([
-    CLIENT_DIDDOC_MULTIKEY as DIDDoc,
     MEDIATOR_DIDDOC as DIDDoc,
   ]);
   const secret_resolver: SecretsResolver = new ExampleSecretsResolver(SECRETS);
