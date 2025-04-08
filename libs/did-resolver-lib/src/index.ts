@@ -1,5 +1,5 @@
 export {
   ExampleDIDResolver,
   ExampleSecretsResolver,
-} from './ExampleDIDResolver';
-export { default as PeerDIDResolver } from './resolver';
+} from './lib/ExampleDIDResolver';
+export { default as PeerDIDResolver } from './lib/resolver';

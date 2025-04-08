@@ -13,6 +13,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@adorsys-gis/did-resolver-lib": "^1.0.0",
+    "@adorsys-gis/message-exchange": "^1.0.0",
+    "@adorsys-gis/message-service": "^1.0.0",
     "uuidv4": "^6.2.13"
   },
   "devDependencies": {

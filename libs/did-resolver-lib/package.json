@@ -1,15 +1,12 @@
 {
-  "name": "did-resolver-lib",
-  "version": "1.0.0",
+  "name": "@adorsys-gis/did-resolver-lib",
+  "version": "1.0.1",
   "main": "src/index.ts",
   "scripts": {
     "test": "jest",
     "lint": "eslint '**/*.{js,ts,jsx,tsx}'",
     "build": "tsc -b"
   },
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "type": "commonjs",
   "dependencies": {
     "base64url": "^3.0.1",
@@ -23,5 +20,16 @@
     "eslint": "^9.13.0",
     "ts-jest": "^29.2.5",
     "typescript-eslint": "^8.7.0"
-  }
+  },
+  "description": "A library or tool that allows applications to resolve Decentralized Identifiers (DIDs) into their corresponding DID Documents.",
+  "keywords": [
+    "Decentralized Identifiers (DIDs)",
+    "DID Document",
+    "DID Resolution",
+    "did-resolver",
+    "DID Methods",
+    "key-did-resolver"
+  ],
+  "author": "adorsys",
+  "license": "ISC"
 }

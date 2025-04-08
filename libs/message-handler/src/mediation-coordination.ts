@@ -4,7 +4,7 @@ import {
   ExampleDIDResolver,
   ExampleSecretsResolver,
   PeerDIDResolver,
-} from 'did-resolver-lib';
+} from '@adorsys-gis/did-resolver-lib';
 import { v4 as uuidv4 } from 'uuid';
 
 enum Action {
