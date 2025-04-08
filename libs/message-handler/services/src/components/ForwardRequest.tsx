@@ -6,7 +6,7 @@ import {
   Box,
   Typography,
 } from '@mui/material';
-import { m } from './../../../src/protocols/forward-client';
+import {  } from './../../../src/protocols/forward-client';
 
 const ForwardMessageUI = () => {
   const [mediator_did, setMediatorDID] = useState('');
