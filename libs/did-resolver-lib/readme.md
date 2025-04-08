@@ -1,4 +1,3 @@
-
 # didcomm-peer-did-resolver
 
 A lightweight Peer DID and secrets resolver for [DIDComm](https://identity.foundation/didcomm-messaging/spec/) written in **TypeScript**, compatible with both browser and Node.js environments.
@@ -48,7 +47,9 @@ Use this if you already have DIDDocs and want to simulate DIDComm resolution:
 ```ts
 import { DIDDoc } from 'didcomm';
 
-const doc: DIDDoc = { /* your DIDDoc */ };
+const doc: DIDDoc = {
+  /* your DIDDoc */
+};
 const resolver = new ExampleDIDResolver([doc]);
 
 const result = await resolver.resolve(doc.id);
@@ -60,7 +61,9 @@ console.log(result); // DIDDoc or null
 ```ts
 import { Secret } from 'didcomm';
 
-const secret: Secret = { /* your secret */ };
+const secret: Secret = {
+  /* your secret */
+};
 const resolver = new ExampleSecretsResolver([secret]);
 
 const found = await resolver.get_secret(secret.id);

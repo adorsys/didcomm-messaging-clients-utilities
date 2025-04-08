@@ -15,8 +15,7 @@
 
     /* Bundler mode */
     "isolatedModules": true,
-    "moduleDetection": "force",
-    
+    "moduleDetection": "force"
   },
-  "include": ["src/**/*", "**/*.ts"],
+  "include": ["src/**/*", "**/*.ts"]
 }

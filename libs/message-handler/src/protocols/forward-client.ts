@@ -12,7 +12,7 @@ import {
   PeerDIDResolver,
   ExampleDIDResolver,
   ExampleSecretsResolver,
-} from 'did-resolver-lib';
+} from '@adorsys-gis/did-resolver-lib';
 import { ROUTING } from '../shared_data/message_types';
 import { CLIENT_SECRETS } from '../secrets/client';
 import { MEDIATOR_ENDPOINT } from '../shared_data/endpoints';
